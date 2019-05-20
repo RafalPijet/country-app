@@ -5,7 +5,7 @@ import store from './store/index';
 import {Router, hashHistory} from "react-router";
 import routes from './routes';
 import DevTools from './utilities/DevTools';
-import {getCountries} from "./actions/actions-countries";
+import './country.css';
 
 ReactDOM.render(
     <Provider store={store}>
@@ -15,5 +15,3 @@ ReactDOM.render(
         </div>
     </Provider>,
     document.getElementById('root'));
-
-store.dispatch(getCountries());
