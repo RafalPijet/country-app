@@ -4,6 +4,12 @@ import CountryFlagList from '../presentational/flag-list.component';
 import {getCountries, searchCountries, deleteCountry} from '../actions/actions-countries'
 
 class CountryFlagContainer  extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            hidden: true
+        }
+    }
 
     componentDidMount() {
         this.props.dispatch(getCountries());
@@ -15,14 +21,21 @@ class CountryFlagContainer  extends Component {
     }
 
     deleteCountry(id) {
-        this.props.dispatch(deleteCountry(id));
-    }
+        const removeCountry = () => new Promise(resolve => resolve(
+            this.props.dispatch(deleteCountry(id))
+        ));
+        removeCountry()
+            .then(() => this.props.dispatch(getCountries()))
+            .then(() => this.props.visibleCountries.length === 0 ? this.setState({hidden: false}) : [])
+    };
+
 
     render() {
         return (
             <div>
                 <div className="search text-center">
                     <input type="text" onChange={this.search.bind(this)}/>
+                    <h1 hidden={this.state.hidden}>Wyczyściłeś całą listę państw, Oskar :)</h1>
                 </div>
                 <CountryFlagList countries={this.props.visibleCountries} deleteCountry={this.deleteCountry.bind(this)}/>
             </div>
